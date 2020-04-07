@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
-import OrderCheckout from "../components/Order/OrderCheckout/OrderCheckout";
-import ContactData from "./ContactData";
+import OrderCheckout from "../../components/Order/OrderCheckout/OrderCheckout";
+import ContactData from "../ContactData";
 
 class Checkout extends Component {
   checkoutCancelHandler = () => {
@@ -39,10 +39,10 @@ class Checkout extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     ingredients: state.burgerBuilder.ingredients,
-    purchased: state.order.purchased
+    purchased: state.order.purchased,
   };
 };
 

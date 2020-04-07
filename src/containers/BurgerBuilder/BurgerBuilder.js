@@ -1,19 +1,19 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 
-import Burger from "../components/Burger/Burger";
-import BuildControls from "../components/Burger/BuilControls/BuildControls";
-import Modal from "../components/UI/Modal/Modal";
-import OrderSummary from "../components/Burger/OrderSummary/OrderSummary";
-import axios from "../axios-orders";
-import Spinner from "../components/UI/Spinner/Spinner";
-import withErrorHandler from "../hoc/withErrorHandler/withErrorHandler";
-import * as actions from "../store/actions/index.js";
+import Burger from "../../components/Burger/Burger";
+import BuildControls from "../../components/Burger/BuilControls/BuildControls";
+import Modal from "../../components/UI/Modal/Modal";
+import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
+import axios from "../../axios-orders";
+import Spinner from "../../components/UI/Spinner/Spinner";
+import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
+import * as actions from "../../store/actions/index.js";
 
-class BurgerBuilder extends Component {
+export class BurgerBuilder extends Component {
   state = {
     puchaseable: false,
-    toPurchase: false
+    toPurchase: false,
   };
 
   componentDidMount() {
@@ -22,7 +22,7 @@ class BurgerBuilder extends Component {
 
   updatePurchaseState(ingredients) {
     const sum = Object.keys(ingredients)
-      .map(key => {
+      .map((key) => {
         return ingredients[key];
       })
       .reduce((acc, el) => {
@@ -34,20 +34,21 @@ class BurgerBuilder extends Component {
 
   purchaseHandler = () => {
     if (this.props.isAuth) {
-      this.setState(prevState => {
+      this.setState((prevState) => {
         return {
           // ...this.state,
-          toPurchase: !prevState.toPurchase
+          toPurchase: !prevState.toPurchase,
         };
       });
     } else {
+      this.props.onSetAuthRedirectPath("/checkout");
       this.props.history.push("/auth");
     }
   };
 
   purchaseCancelHandler = () => {
     this.setState({
-      toPurchase: false
+      toPurchase: false,
     });
   };
 
@@ -58,7 +59,7 @@ class BurgerBuilder extends Component {
 
   render() {
     const disabledInfo = {
-      ...this.props.ingredients
+      ...this.props.ingredients,
     };
 
     for (let key in disabledInfo) {
@@ -112,21 +113,24 @@ class BurgerBuilder extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     ingredients: state.burgerBuilder.ingredients,
     price: state.burgerBuilder.totalPrice,
     error: state.burgerBuilder.error,
-    isAuth: state.auth.token !== null
+    isAuth: state.auth.token !== null,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    onAddIngredient: ingName => dispatch(actions.addIngredient(ingName)),
-    onRemoveIngredient: ingName => dispatch(actions.removeIngredient(ingName)),
+    onAddIngredient: (ingName) => dispatch(actions.addIngredient(ingName)),
+    onRemoveIngredient: (ingName) =>
+      dispatch(actions.removeIngredient(ingName)),
     onInitIngredients: () => dispatch(actions.initIngredients()),
-    onInitPurchase: () => dispatch(actions.purchaseInit())
+    onInitPurchase: () => dispatch(actions.purchaseInit()),
+    onSetAuthRedirectPath: (path) =>
+      dispatch(actions.setAuthRedirectPath(path)),
   };
 };
 

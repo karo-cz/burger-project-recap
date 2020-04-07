@@ -16,71 +16,71 @@ class ContactData extends Component {
         elementType: "input",
         elementConfig: {
           type: "text",
-          placeholder: "Your name"
+          placeholder: "Your name",
         },
         value: "",
         validation: {
           required: true,
-          minLength: 8
+          minLength: 8,
         },
         valid: false,
-        touched: false
+        touched: false,
       },
       street: {
         elementType: "input",
         elementConfig: {
           type: "text",
-          placeholder: "Your street"
+          placeholder: "Your street",
         },
         value: "",
         validation: {
           required: true,
-          minLength: 6
+          minLength: 6,
         },
         valid: false,
-        touched: false
+        touched: false,
       },
       city: {
         elementType: "input",
         elementConfig: {
           type: "text",
-          placeholder: "Your city"
+          placeholder: "Your city",
         },
         value: "",
         validation: {
           required: true,
-          minLength: 3
+          minLength: 3,
         },
         valid: false,
-        touched: false
+        touched: false,
       },
       postalCode: {
         elementType: "input",
         elementConfig: {
           type: "text",
-          placeholder: "Postal code"
+          placeholder: "Postal code",
         },
         value: "",
         validation: {
           required: true,
-          minLength: 3
+          minLength: 3,
         },
         valid: false,
-        touched: false
+        touched: false,
       },
       email: {
         elementType: "input",
         elementConfig: {
           type: "email",
-          placeholder: "Your e-mail"
+          placeholder: "Your e-mail",
         },
         value: "",
         validation: {
           required: true,
-          minLength: 8
+          minLength: 8,
         },
         valid: false,
-        touched: false
+        touched: false,
       },
       deliveryMethod: {
         elementType: "select",
@@ -88,23 +88,23 @@ class ContactData extends Component {
           options: [
             {
               value: "fastest",
-              displayValue: "Fastest"
+              displayValue: "Fastest",
             },
             {
               value: "cheapest",
-              displayValue: "Cheapest"
-            }
-          ]
+              displayValue: "Cheapest",
+            },
+          ],
         },
         value: "fastest",
         valid: true,
-        validation: {}
-      }
+        validation: {},
+      },
     },
-    formIsValid: false
+    formIsValid: false,
   };
 
-  orderHandler = event => {
+  orderHandler = (event) => {
     event.preventDefault();
 
     const formData = {};
@@ -116,7 +116,8 @@ class ContactData extends Component {
     const order = {
       ingredients: this.props.ingredients,
       price: this.props.price, // in real app calculate price on the serveer side, for safety
-      orderData: formData
+      orderData: formData,
+      userId: this.props.userId,
     };
     this.props.onOrderBurger(order, this.props.token);
   };
@@ -136,11 +137,11 @@ class ContactData extends Component {
 
   inputChangeHandler = (event, inputId) => {
     const updatedOrderForm = {
-      ...this.state.orderForm
+      ...this.state.orderForm,
     };
 
     const updatedFormElement = {
-      ...updatedOrderForm[inputId]
+      ...updatedOrderForm[inputId],
     };
 
     updatedFormElement.value = event.target.value;
@@ -159,7 +160,7 @@ class ContactData extends Component {
 
     this.setState({
       orderForm: updatedOrderForm,
-      formIsValid: formIsValid
+      formIsValid: formIsValid,
     });
   };
 
@@ -169,13 +170,13 @@ class ContactData extends Component {
     for (let el in this.state.orderForm) {
       formElements.push({
         id: el,
-        config: this.state.orderForm[el]
+        config: this.state.orderForm[el],
       });
     }
 
     let form = (
       <form onSubmit={this.orderHandler}>
-        {formElements.map(formElement => {
+        {formElements.map((formElement) => {
           return (
             <Input
               invalid={!formElement.config.valid}
@@ -185,7 +186,9 @@ class ContactData extends Component {
               elementType={formElement.config.elementType}
               elementConfig={formElement.config.elementConfig}
               value={formElement.config.value}
-              changed={event => this.inputChangeHandler(event, formElement.id)}
+              changed={(event) =>
+                this.inputChangeHandler(event, formElement.id)
+              }
             />
           );
         })}
@@ -213,19 +216,20 @@ class ContactData extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     ingredients: state.burgerBuilder.ingredients,
     price: state.burgerBuilder.totalPrice,
     loading: state.order.loading,
-    token: state.auth.token
+    token: state.auth.token,
+    userId: state.auth.userId,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     onOrderBurger: (orderData, token) =>
-      dispatch(actions.purchaseBurger(orderData, token))
+      dispatch(actions.purchaseBurger(orderData, token)),
   };
 };
 
